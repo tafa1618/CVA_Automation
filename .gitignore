@@ -1,0 +1,22 @@
+Data/
+# Extracted PDF text
+*_extracted.txt
+# Temporary exploration scripts
+explore_excel.py
+extract_pdf.py
+# Compiled files
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+.next/
+out/
+build/
+
+# Environment
+.env*
+
+# OS files
+.DS_Store
+Thumbs.db
