@@ -7,6 +7,7 @@ Une solution centralisée pour la gestion et le suivi des **Customer Value Agree
 ## 🎯 Objectifs du Projet
 Ce projet automatise le suivi des KPIs critiques pour la performance du service après-vente :
 - **CVA Fulfillment** : Mesure de la conformité des contrats basée sur le SOS, les inspections et la connectivité.
+- **Chiffrage Automatique** : Génération instantanée de devis basés sur les taux horaires techniques (Pièces, MO, SOS, etc.).
 - **PM Accuracy** : Suivi précis de la ponctualité des maintenances préventives.
 - **CVA 1 vs CVA 2** : Distinction claire entre la main-d'œuvre client (DIM) et concessionnaire (DIFM).
 - **Proactivité** : Alertes automatiques pour les renouvellements et les chutes de score de fulfillment.

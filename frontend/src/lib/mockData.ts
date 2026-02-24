@@ -106,3 +106,30 @@ export const kpiStats = {
   active_contracts: 154,
   renewals_due: 12
 };
+
+export interface QuotationModel {
+  id: string;
+  name: string;
+  type: 'Machine' | 'GE Prime' | 'GE Standby';
+  parts_rate: number;
+  lubricants_rate: number;
+  sos_rate: number;
+  mo_rate: number;
+}
+
+export const quotationModels: QuotationModel[] = [
+  { id: '1', name: '320-07', type: 'Machine', parts_rate: 12.5, lubricants_rate: 3.2, sos_rate: 1.5, mo_rate: 15.0 },
+  { id: '2', name: '330D', type: 'Machine', parts_rate: 15.2, lubricants_rate: 4.5, sos_rate: 1.5, mo_rate: 15.0 },
+  { id: '3', name: 'D6T', type: 'Machine', parts_rate: 22.1, lubricants_rate: 6.8, sos_rate: 2.0, mo_rate: 18.0 },
+  { id: '4', name: '966L', type: 'Machine', parts_rate: 18.5, lubricants_rate: 5.5, sos_rate: 1.5, mo_rate: 15.0 },
+  { id: '5', name: 'DE450', type: 'GE Prime', parts_rate: 8.5, lubricants_rate: 2.8, sos_rate: 1.0, mo_rate: 12.0 },
+  { id: '6', name: 'DE110', type: 'GE Standby', parts_rate: 5.2, lubricants_rate: 1.5, sos_rate: 1.0, mo_rate: 10.0 },
+];
+
+export const locations = [
+  { name: 'Dakar', travel_rate: 0 },
+  { name: 'Thies', travel_rate: 5.0 },
+  { name: 'Saly', travel_rate: 7.5 },
+  { name: 'Saint-Louis', travel_rate: 15.0 },
+  { name: 'Kedougou', travel_rate: 25.0 },
+];

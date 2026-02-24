@@ -11,29 +11,40 @@ import {
     ChevronRight,
     TrendingUp,
     ShieldCheck,
-    ClipboardCheck
+    ClipboardCheck,
+    Calculator
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+interface SidebarProps {
+    activeTab: string;
+    onTabChange: (tab: string) => void;
+}
 
 interface NavItemProps {
     icon: React.ElementType;
     label: string;
+    id: string;
     active?: boolean;
+    onClick: (id: string) => void;
 }
 
-const NavItem = ({ icon: Icon, label, active }: NavItemProps) => (
-    <div className={cn(
-        "flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 group",
-        active
-            ? "bg-neemba-yellow text-neemba-black font-semibold shadow-md"
-            : "text-gray-400 hover:text-neemba-yellow hover:bg-white/5"
-    )}>
+const NavItem = ({ icon: Icon, label, id, active, onClick }: NavItemProps) => (
+    <div
+        onClick={() => onClick(id)}
+        className={cn(
+            "flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 group",
+            active
+                ? "bg-neemba-yellow text-neemba-black font-semibold shadow-md"
+                : "text-gray-400 hover:text-neemba-yellow hover:bg-white/5"
+        )}
+    >
         <Icon size={20} className={cn(active ? "text-neemba-black" : "group-hover:scale-110 transition-transform")} />
         <span className="text-sm">{label}</span>
     </div>
 );
 
-export const Sidebar = () => {
+export const Sidebar = ({ activeTab, onTabChange }: SidebarProps) => {
     return (
         <div className="w-64 h-screen bg-black border-r border-white/10 flex flex-col p-4 fixed left-0 top-0 z-50">
             {/* Brand */}
@@ -50,15 +61,16 @@ export const Sidebar = () => {
             {/* Nav */}
             <div className="flex-1 flex flex-col gap-2">
                 <p className="px-4 text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2">Main Menu</p>
-                <NavItem icon={LayoutDashboard} label="Dashboard" active />
-                <NavItem icon={MapIcon} label="Machine Map" />
-                <NavItem icon={ShieldCheck} label="CVA Fulfillment" />
-                <NavItem icon={TrendingUp} label="PM Accuracy" />
-                <NavItem icon={ClipboardCheck} label="Service Commitment" />
+                <NavItem icon={LayoutDashboard} label="Dashboard" id="dashboard" active={activeTab === 'dashboard'} onClick={onTabChange} />
+                <NavItem icon={MapIcon} label="Machine Map" id="map" active={activeTab === 'map'} onClick={onTabChange} />
+                <NavItem icon={ShieldCheck} label="CVA Fulfillment" id="fulfillment" active={activeTab === 'fulfillment'} onClick={onTabChange} />
+                <NavItem icon={TrendingUp} label="PM Accuracy" id="accuracy" active={activeTab === 'accuracy'} onClick={onTabChange} />
+                <NavItem icon={ClipboardCheck} label="Service Commitment" id="commitment" active={activeTab === 'commitment'} onClick={onTabChange} />
+                <NavItem icon={Calculator} label="Chiffrage" id="quotation" active={activeTab === 'quotation'} onClick={onTabChange} />
 
                 <p className="px-4 text-[10px] text-gray-500 font-bold uppercase tracking-wider mt-8 mb-2">Tools</p>
-                <NavItem icon={PlusCircle} label="New Contract" />
-                <NavItem icon={Settings} label="Settings" />
+                <NavItem icon={PlusCircle} label="New Contract" id="new" onClick={onTabChange} />
+                <NavItem icon={Settings} label="Settings" id="settings" onClick={onTabChange} />
             </div>
 
             {/* User */}

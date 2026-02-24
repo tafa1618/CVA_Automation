@@ -16,6 +16,7 @@ import {
 import { Sidebar } from '@/components/layout/Sidebar';
 import { KPICard } from '@/components/dashboard/KPICard';
 import { CVATable } from '@/components/dashboard/CVATable';
+import { Quotation } from '@/components/dashboard/Quotation';
 import { kpiStats } from '@/lib/mockData';
 import { cn } from '@/lib/utils';
 
@@ -26,16 +27,24 @@ const CVAMap = dynamic(() => import('@/components/dashboard/CVAMap'), {
 });
 
 export default function Dashboard() {
+    const [activeTab, setActiveTab] = React.useState('dashboard');
+
     return (
         <div className="flex bg-black min-h-screen">
-            <Sidebar />
+            <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
             <main className="flex-1 ml-64 p-8 overflow-y-auto">
                 {/* Header */}
                 <header className="flex justify-between items-center mb-10">
                     <div>
-                        <h2 className="text-3xl font-extrabold text-white tracking-tight">CVA Monitoring</h2>
-                        <p className="text-sm text-gray-400 mt-1">Plateforme de gestion centralisée des contrats de valeur client.</p>
+                        <h2 className="text-3xl font-extrabold text-white tracking-tight">
+                            {activeTab === 'dashboard' ? 'CVA Monitoring' : 'CVA Pricing Tool'}
+                        </h2>
+                        <p className="text-sm text-gray-400 mt-1">
+                            {activeTab === 'dashboard'
+                                ? 'Plateforme de gestion centralisée des contrats de valeur client.'
+                                : 'Automatisation du chiffrage technique et commercial.'}
+                        </p>
                     </div>
 
                     <div className="flex items-center gap-4">
@@ -59,83 +68,94 @@ export default function Dashboard() {
                     </div>
                 </header>
 
-                {/* KPI Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                    <KPICard
-                        label="CVA Fulfillment"
-                        value={kpiStats.fulfillment_avg}
-                        suffix="%"
-                        trend={12}
-                        icon={ShieldCheck}
-                        description="Moyenne globale basée sur le SOS, l'Inspection et la Connectivité."
-                    />
-                    <KPICard
-                        label="PM Accuracy"
-                        value={kpiStats.pm_accuracy}
-                        suffix="%"
-                        trend={5}
-                        icon={Settings2}
-                        description="Conformité des opérations de maintenance préventive."
-                    />
-                    <KPICard
-                        label="Active Contracts"
-                        value={kpiStats.active_contracts}
-                        icon={Users}
-                        description="Nombre total de contrats CVA enregistrés sur le périmètre."
-                    />
-                    <KPICard
-                        label="Inspection Rate"
-                        value={kpiStats.inspection_rate}
-                        suffix="%"
-                        trend={-2}
-                        icon={BarChart3}
-                        description="Taux de couverture des inspections conditionnelles."
-                    />
-                </div>
+                {activeTab === 'dashboard' ? (
+                    <>
 
-                {/* Map & Secondary Tools */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
-                    <div className="lg:col-span-2">
-                        <div className="flex justify-between items-end mb-4 px-2">
-                            <div>
-                                <h3 className="font-bold text-white">Répartition Géographique</h3>
-                                <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Données VisionLink temps réel</p>
-                            </div>
-                            <button className="flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-neemba-yellow transition-colors">
-                                <Filter size={14} /> Filtrer par région
-                            </button>
+                        {/* KPI Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                            <KPICard
+                                label="CVA Fulfillment"
+                                value={kpiStats.fulfillment_avg}
+                                suffix="%"
+                                trend={12}
+                                icon={ShieldCheck}
+                                description="Moyenne globale basée sur le SOS, l'Inspection et la Connectivité."
+                            />
+                            <KPICard
+                                label="PM Accuracy"
+                                value={kpiStats.pm_accuracy}
+                                suffix="%"
+                                trend={5}
+                                icon={Settings2}
+                                description="Conformité des opérations de maintenance préventive."
+                            />
+                            <KPICard
+                                label="Active Contracts"
+                                value={kpiStats.active_contracts}
+                                icon={Users}
+                                description="Nombre total de contrats CVA enregistrés sur le périmètre."
+                            />
+                            <KPICard
+                                label="Inspection Rate"
+                                value={kpiStats.inspection_rate}
+                                suffix="%"
+                                trend={-2}
+                                icon={BarChart3}
+                                description="Taux de couverture des inspections conditionnelles."
+                            />
                         </div>
-                        <CVAMap />
-                    </div>
 
-                    <div className="bg-card border border-border rounded-2xl p-6 flex flex-col">
-                        <h3 className="font-bold text-white mb-6">Alertes & Renouvellements</h3>
-                        <div className="space-y-4 flex-1">
-                            {[
-                                { client: "MWP Mining", date: "Dans 12 jours", type: "Fulfillment Faible", color: "text-red-400" },
-                                { client: "BTP Global", date: "Dans 25 jours", type: "Renouvellement", color: "text-neemba-yellow" },
-                                { client: "Senegal Gold", date: "Dans 30 jours", type: "Connectivité Perdue", color: "text-orange-400" },
-                            ].map((item, i) => (
-                                <div key={i} className="flex gap-4 p-3 rounded-xl hover:bg-white/5 transition-all cursor-pointer border border-transparent hover:border-white/10 group">
-                                    <div className={cn("w-1 h-12 rounded-full", i === 0 ? "bg-red-400" : i === 1 ? "bg-neemba-yellow" : "bg-orange-400")} />
+                        {/* Map & Secondary Tools */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+                            <div className="lg:col-span-2">
+                                <div className="flex justify-between items-end mb-4 px-2">
                                     <div>
-                                        <p className="text-xs font-bold text-white group-hover:text-neemba-yellow transition-colors">{item.client}</p>
-                                        <p className={cn("text-[10px] font-bold uppercase", item.color)}>{item.type}</p>
-                                        <p className="text-[10px] text-gray-500 mt-1 flex items-center gap-1">
-                                            <Clock size={10} /> {item.date}
-                                        </p>
+                                        <h3 className="font-bold text-white">Répartition Géographique</h3>
+                                        <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Données VisionLink temps réel</p>
                                     </div>
+                                    <button className="flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-neemba-yellow transition-colors">
+                                        <Filter size={14} /> Filtrer par région
+                                    </button>
                                 </div>
-                            ))}
-                        </div>
-                        <button className="w-full py-3 mt-6 bg-white/5 hover:bg-white/10 text-xs font-bold text-white rounded-xl border border-white/10 transition-all uppercase tracking-widest">
-                            Voir toutes les alertes
-                        </button>
-                    </div>
-                </div>
+                                <CVAMap />
+                            </div>
 
-                {/* Data Table */}
-                <CVATable />
+                            <div className="bg-card border border-border rounded-2xl p-6 flex flex-col">
+                                <h3 className="font-bold text-white mb-6">Alertes & Renouvellements</h3>
+                                <div className="space-y-4 flex-1">
+                                    {[
+                                        { client: "MWP Mining", date: "Dans 12 jours", type: "Fulfillment Faible", color: "text-red-400" },
+                                        { client: "BTP Global", date: "Dans 25 jours", type: "Renouvellement", color: "text-neemba-yellow" },
+                                        { client: "Senegal Gold", date: "Dans 30 jours", type: "Connectivité Perdue", color: "text-orange-400" },
+                                    ].map((item, i) => (
+                                        <div key={i} className="flex gap-4 p-3 rounded-xl hover:bg-white/5 transition-all cursor-pointer border border-transparent hover:border-white/10 group">
+                                            <div className={cn("w-1 h-12 rounded-full", i === 0 ? "bg-red-400" : i === 1 ? "bg-neemba-yellow" : "bg-orange-400")} />
+                                            <div>
+                                                <p className="text-xs font-bold text-white group-hover:text-neemba-yellow transition-colors">{item.client}</p>
+                                                <p className={cn("text-[10px] font-bold uppercase", item.color)}>{item.type}</p>
+                                                <p className="text-[10px] text-gray-500 mt-1 flex items-center gap-1">
+                                                    <Clock size={10} /> {item.date}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button className="w-full py-3 mt-6 bg-white/5 hover:bg-white/10 text-xs font-bold text-white rounded-xl border border-white/10 transition-all uppercase tracking-widest">
+                                    Voir toutes les alertes
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Data Table */}
+                        <CVATable />
+                    </>
+                ) : activeTab === 'quotation' ? (
+                    <Quotation />
+                ) : (
+                    <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-white/10 rounded-3xl">
+                        <p className="text-gray-500 font-bold uppercase tracking-widest">Contenu en cours de développement</p>
+                    </div>
+                )}
 
                 {/* Footer */}
                 <footer className="mt-12 text-center">
