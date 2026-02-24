@@ -1,12 +1,15 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === "production";
+const repoName = "/CVA_Automation";
+
 const nextConfig: NextConfig = {
   output: "export",
   images: {
     unoptimized: true,
   },
-  basePath: "/CVA_Automation",
-  assetPrefix: "/CVA_Automation",
+  basePath: isProd ? repoName : "",
+  assetPrefix: isProd ? repoName : "",
 };
 
 export default nextConfig;

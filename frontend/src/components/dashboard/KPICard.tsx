@@ -11,11 +11,18 @@ interface KPICardProps {
     trend?: number;
     icon: React.ElementType;
     description?: string;
+    onClick?: () => void;
 }
 
-export const KPICard = ({ label, value, suffix, trend, icon: Icon, description }: KPICardProps) => {
+export const KPICard = ({ label, value, suffix, trend, icon: Icon, description, onClick }: KPICardProps) => {
     return (
-        <div className="bg-card border border-border rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:shadow-neemba-yellow/5 hover:border-neemba-yellow/20 group">
+        <div
+            onClick={onClick}
+            className={cn(
+                "bg-card border border-border rounded-2xl p-6 transition-all duration-300 group",
+                onClick ? "cursor-pointer hover:shadow-xl hover:shadow-neemba-yellow/5 hover:border-neemba-yellow/20" : ""
+            )}
+        >
             <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-neemba-yellow/10 rounded-xl group-hover:bg-neemba-yellow group-hover:text-black transition-colors duration-300">
                     <Icon size={24} className="text-neemba-yellow group-hover:text-black transition-colors" />
