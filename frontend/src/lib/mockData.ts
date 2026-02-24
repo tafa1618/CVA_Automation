@@ -118,18 +118,41 @@ export interface QuotationModel {
 }
 
 export const quotationModels: QuotationModel[] = [
-  { id: '1', name: '320-07', type: 'Machine', parts_rate: 12.5, lubricants_rate: 3.2, sos_rate: 1.5, mo_rate: 15.0 },
-  { id: '2', name: '330D', type: 'Machine', parts_rate: 15.2, lubricants_rate: 4.5, sos_rate: 1.5, mo_rate: 15.0 },
-  { id: '3', name: 'D6T', type: 'Machine', parts_rate: 22.1, lubricants_rate: 6.8, sos_rate: 2.0, mo_rate: 18.0 },
-  { id: '4', name: '966L', type: 'Machine', parts_rate: 18.5, lubricants_rate: 5.5, sos_rate: 1.5, mo_rate: 15.0 },
-  { id: '5', name: 'DE450', type: 'GE Prime', parts_rate: 8.5, lubricants_rate: 2.8, sos_rate: 1.0, mo_rate: 12.0 },
-  { id: '6', name: 'DE110', type: 'GE Standby', parts_rate: 5.2, lubricants_rate: 1.5, sos_rate: 1.0, mo_rate: 10.0 },
+  { id: '1', name: '320-07', type: 'Machine', parts_rate: 7500, lubricants_rate: 1900, sos_rate: 900, mo_rate: 9000 },
+  { id: '2', name: '330D', type: 'Machine', parts_rate: 9100, lubricants_rate: 2700, sos_rate: 900, mo_rate: 9000 },
+  { id: '3', name: 'D6T', type: 'Machine', parts_rate: 13200, lubricants_rate: 4100, sos_rate: 1200, mo_rate: 10800 },
+  { id: '4', name: '966L', type: 'Machine', parts_rate: 11100, lubricants_rate: 3300, sos_rate: 900, mo_rate: 9000 },
+  { id: '5', name: 'DE450', type: 'GE Prime', parts_rate: 5100, lubricants_rate: 1700, sos_rate: 600, mo_rate: 7200 },
+  { id: '6', name: 'DE110', type: 'GE Standby', parts_rate: 3100, lubricants_rate: 900, sos_rate: 600, mo_rate: 6000 },
 ];
 
 export const locations = [
   { name: 'Dakar', travel_rate: 0 },
-  { name: 'Thies', travel_rate: 5.0 },
-  { name: 'Saly', travel_rate: 7.5 },
-  { name: 'Saint-Louis', travel_rate: 15.0 },
-  { name: 'Kedougou', travel_rate: 25.0 },
+  { name: 'Thies', travel_rate: 3000 },
+  { name: 'Saly', travel_rate: 4500 },
+  { name: 'Saint-Louis', travel_rate: 9000 },
+  { name: 'Kedougou', travel_rate: 15000 },
 ];
+
+export const pmAccuracyData = [
+  { month: 'Sep', compliant: 78, overdue: 22 },
+  { month: 'Oct', compliant: 82, overdue: 18 },
+  { month: 'Nov', compliant: 80, overdue: 20 },
+  { month: 'Dec', compliant: 85, overdue: 15 },
+  { month: 'Jan', compliant: 88, overdue: 12 },
+  { month: 'Feb', compliant: 82, overdue: 18 },
+];
+
+export const fulfillmentByPillar = [
+  { pillar: 'SOS', score_cva1: 65, score_cva2: 85 },
+  { pillar: 'Inspection', score_cva1: 45, score_cva2: 92 },
+  { pillar: 'Connectivité', score_cva1: 78, score_cva2: 88 },
+];
+
+export const serviceCommitmentData = {
+  active_fleet: 450,
+  under_contract: 154,
+  renewals_predicted: 28,
+  support_tickets: 12,
+  average_response: '4.2h'
+};

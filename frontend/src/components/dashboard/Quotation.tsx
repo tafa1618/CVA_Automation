@@ -125,7 +125,7 @@ export const Quotation = () => {
                             <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center text-center group hover:bg-white/10 transition-all">
                                 <item.icon size={20} className={cn("mb-2 group-hover:scale-110 transition-transform", item.color)} />
                                 <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{item.label}</p>
-                                <p className="text-sm font-bold text-white mt-1">${item.value.toFixed(2)}/h</p>
+                                <p className="text-sm font-bold text-white mt-1">{item.value.toLocaleString('fr-FR')} F/h</p>
                             </div>
                         ))}
                     </div>
@@ -152,7 +152,7 @@ export const Quotation = () => {
                             <div className="flex justify-between items-end">
                                 <div>
                                     <p className="text-[10px] font-bold uppercase opacity-60">Taux Horaire Total</p>
-                                    <p className="text-3xl font-black">${totalHourlyRate.toFixed(2)}<span className="text-sm opacity-60 ml-1">/h</span></p>
+                                    <p className="text-3xl font-black">{totalHourlyRate.toLocaleString('fr-FR')}<span className="text-sm opacity-60 ml-1">F/h</span></p>
                                 </div>
                                 <Clock size={32} className="opacity-20" />
                             </div>
@@ -161,7 +161,7 @@ export const Quotation = () => {
 
                             <div>
                                 <p className="text-[10px] font-bold uppercase opacity-60">Montant Annuel Estimé</p>
-                                <p className="text-4xl font-black tracking-tighter">${annualTotal.toLocaleString('fr-FR', { minimumFractionDigits: 2 })}</p>
+                                <p className="text-4xl font-black tracking-tighter">{annualTotal.toLocaleString('fr-FR')} <span className="text-xl">F CFA</span></p>
                                 <p className="text-[10px] font-bold mt-1 opacity-60 italic">Hors taxes • Base {usageHours}h/an</p>
                             </div>
                         </div>

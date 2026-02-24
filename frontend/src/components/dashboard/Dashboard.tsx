@@ -11,12 +11,16 @@ import {
     Bell,
     Calendar,
     Filter,
-    Clock
+    Clock,
+    Expand
 } from 'lucide-react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { KPICard } from '@/components/dashboard/KPICard';
 import { CVATable } from '@/components/dashboard/CVATable';
 import { Quotation } from '@/components/dashboard/Quotation';
+import { PMAccuracy } from '@/components/dashboard/PMAccuracy';
+import { FulfillmentDetails } from '@/components/dashboard/FulfillmentDetails';
+import { ServiceCommitment } from '@/components/dashboard/ServiceCommitment';
 import { kpiStats } from '@/lib/mockData';
 import { cn } from '@/lib/utils';
 
@@ -38,12 +42,20 @@ export default function Dashboard() {
                 <header className="flex justify-between items-center mb-10">
                     <div>
                         <h2 className="text-3xl font-extrabold text-white tracking-tight">
-                            {activeTab === 'dashboard' ? 'CVA Monitoring' : 'CVA Pricing Tool'}
+                            {activeTab === 'dashboard' ? 'CVA Monitoring' :
+                                activeTab === 'map' ? 'Machine Strategy Map' :
+                                    activeTab === 'fulfillment' ? 'CVA Fulfillment Details' :
+                                        activeTab === 'accuracy' ? 'Maintenance Accuracy' :
+                                            activeTab === 'commitment' ? 'Service Fleet Health' :
+                                                'CVA Pricing Tool'}
                         </h2>
                         <p className="text-sm text-gray-400 mt-1">
-                            {activeTab === 'dashboard'
-                                ? 'Plateforme de gestion centralisée des contrats de valeur client.'
-                                : 'Automatisation du chiffrage technique et commercial.'}
+                            {activeTab === 'dashboard' ? 'Plateforme de gestion centralisée des contrats de valeur client.' :
+                                activeTab === 'map' ? 'Visualisation temps réel de la localisation et santé du parc.' :
+                                    activeTab === 'fulfillment' ? 'Analyse comparative SOS, Inspection et Connectivité.' :
+                                        activeTab === 'accuracy' ? 'Suivi de la conformité des intervalles de maintenance.' :
+                                            activeTab === 'commitment' ? 'Engagement de service et support client prospectif.' :
+                                                'Automatisation du chiffrage technique et commercial.'}
                         </p>
                     </div>
 
@@ -70,7 +82,6 @@ export default function Dashboard() {
 
                 {activeTab === 'dashboard' ? (
                     <>
-
                         {/* KPI Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                             <KPICard
@@ -79,6 +90,7 @@ export default function Dashboard() {
                                 suffix="%"
                                 trend={12}
                                 icon={ShieldCheck}
+                                onClick={() => setActiveTab('fulfillment')}
                                 description="Moyenne globale basée sur le SOS, l'Inspection et la Connectivité."
                             />
                             <KPICard
@@ -87,12 +99,14 @@ export default function Dashboard() {
                                 suffix="%"
                                 trend={5}
                                 icon={Settings2}
+                                onClick={() => setActiveTab('accuracy')}
                                 description="Conformité des opérations de maintenance préventive."
                             />
                             <KPICard
                                 label="Active Contracts"
                                 value={kpiStats.active_contracts}
                                 icon={Users}
+                                onClick={() => setActiveTab('commitment')}
                                 description="Nombre total de contrats CVA enregistrés sur le périmètre."
                             />
                             <KPICard
@@ -113,8 +127,11 @@ export default function Dashboard() {
                                         <h3 className="font-bold text-white">Répartition Géographique</h3>
                                         <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Données VisionLink temps réel</p>
                                     </div>
-                                    <button className="flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-neemba-yellow transition-colors">
-                                        <Filter size={14} /> Filtrer par région
+                                    <button
+                                        onClick={() => setActiveTab('map')}
+                                        className="flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-neemba-yellow transition-colors"
+                                    >
+                                        <Expand size={14} /> Voir en plein écran
                                     </button>
                                 </div>
                                 <CVAMap />
@@ -149,6 +166,16 @@ export default function Dashboard() {
                         {/* Data Table */}
                         <CVATable />
                     </>
+                ) : activeTab === 'map' ? (
+                    <div className="h-[calc(100vh-180px)]">
+                        <CVAMap />
+                    </div>
+                ) : activeTab === 'fulfillment' ? (
+                    <FulfillmentDetails />
+                ) : activeTab === 'accuracy' ? (
+                    <PMAccuracy />
+                ) : activeTab === 'commitment' ? (
+                    <ServiceCommitment />
                 ) : activeTab === 'quotation' ? (
                     <Quotation />
                 ) : (
