@@ -15,4 +15,4 @@ COPY . .
 # Make startup script executable
 RUN chmod +x startup.sh
 
-CMD ["./startup.sh"]
+CMD ["bash", "./startup.sh"]

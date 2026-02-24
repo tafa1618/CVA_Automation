@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: cva_automation
     ports:
-      - "5432:5432"
+      - "5443:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -26,6 +26,7 @@ services:
       - ./data:/app/data
     depends_on:
       - db
+    command: [ "bash", "-c", "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000" ]
 
   # Frontend Service (Next.js)
   frontend:
@@ -33,7 +34,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       - backend
 

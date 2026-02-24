@@ -1,7 +1,6 @@
 
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, BigInteger
 from sqlalchemy.orm import relationship
-#from geoalchemy2 import Geometry
 from database import Base
 import datetime
 
@@ -33,7 +32,6 @@ class Machine(Base):
     # Location
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
-    #location = Column(Geometry('POINT', srid=4326), nullable=True) # PostGIS column
     
     # Fields from PSSR_Client sheet
     last_visit = Column(String, nullable=True)
@@ -44,7 +42,6 @@ class Machine(Base):
     client = relationship("Client", back_populates="machines")
 
     cvaf = relationship("CVAF", back_populates="machine", uselist=False)
-    # pssr relationship removed
     suivi_ps = relationship("SuiviPS", back_populates="machine", uselist=True)
     inspection_rate = relationship("InspectionRate", back_populates="machine", uselist=True)
 
@@ -57,10 +54,10 @@ class CVAF(Base):
     id = Column(Integer, primary_key=True, index=True)
     serial_number = Column(String, ForeignKey("machines.serial_number"), unique=True, index=True)
     
-    start_date = Column(String, nullable=True) # Parsing dates from excel can be tricky, keeping as string for now or DateTime if clean
+    start_date = Column(String, nullable=True)
     end_date = Column(String, nullable=True)
-    cva_type = Column(String, nullable=True) # Renewal, New, etc.
-    labor_type = Column(String, nullable=True) # 'CVA 1' (Client) or 'CVA 2' (Dealer)
+    cva_type = Column(String, nullable=True)
+    labor_type = Column(String, nullable=True) # Added for CVA Automation (CVA 1 vs CVA 2)
     country_code = Column(String, nullable=True)
     product_vertical = Column(String, nullable=True)
     dlr_cust_nm = Column(String, nullable=True)
@@ -71,10 +68,6 @@ class CVAF(Base):
     sos_score = Column(String, nullable=True)
 
     machine = relationship("Machine", back_populates="cvaf")
-
-# PSSR table removed
-
-# PSSR table removed
 
 class SuiviPS(Base):
     __tablename__ = "suivi_ps"
@@ -119,13 +112,8 @@ class Intervention(Base):
     id = Column(Integer, primary_key=True, index=True)
     machine_id = Column(Integer, ForeignKey("machines.id"), index=True)
     
-    # Types: 'CVAF', 'INSPECTION', 'SUIVI_PS', 'OPPORTUNITY'
     type = Column(String, index=True)
-    
-    # Priority: 'HIGH', 'MEDIUM', 'LOW'
     priority = Column(String, index=True)
-    
-    # Status: 'PENDING', 'PLANNED', 'COMPLETED', 'CANCELLED'
     status = Column(String, default='PENDING', index=True)
     
     description = Column(String, nullable=True)

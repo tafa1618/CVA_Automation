@@ -11,19 +11,12 @@ import os
 
 app = FastAPI()
 
-
 @app.on_event("startup")
 async def startup_event():
-    # Ensure data directory exists
     os.makedirs("data", exist_ok=True)
-
-    # Create admin user if not exists
     async with AsyncSessionLocal() as db:
-        result = await db.execute(
-            select(User).where(User.email == "admin@neemba.com")
-        )
+        result = await db.execute(select(User).where(User.email == "admin@neemba.com"))
         user = result.scalar_one_or_none()
-
         if not user:
             admin_user = User(
                 email="admin@neemba.com",
@@ -38,15 +31,11 @@ async def startup_event():
         else:
             print("ℹ️ Admin already exists")
 
-
-# Routers
 app.include_router(interventions.router)
 app.include_router(machines.router)
 app.include_router(auth.router)
 app.include_router(admin.router)
 
-
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -55,54 +44,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/")
 def read_root():
-    return {"message": "Intervention Planner Backend Running"}
+    return {"message": "CVA Automation Backend Running"}
 
-
-@app.get("/migrations/status")
-async def get_migration_status(db: AsyncSession = Depends(get_db)):
-    """Get current database migration status"""
-    try:
-        result = await db.execute(text("SELECT version_num FROM alembic_version"))
-        current_version = result.scalar_one_or_none()
-        
-        return {
-            "status": "ok",
-            "current_revision": current_version,
-            "message": "Database migrations applied successfully" if current_version else "No migrations applied yet"
-        }
-    except Exception as e:
-        return {
-            "status": "error",
-            "message": str(e),
-            "current_revision": None
-        }
-
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
 
 @app.post("/upload-programmes")
-async def upload_machines_excel(
-    file: UploadFile = File(...), db: AsyncSession = Depends(get_db)
-):
+async def upload_machines_excel(file: UploadFile = File(...), db: AsyncSession = Depends(get_db)):
     try:
-        temp_file = f"/tmp/uploaded_{file.filename}"
+        temp_file = f"data/uploaded_{file.filename}"
         with open(temp_file, "wb") as f:
             f.write(await file.read())
-
-        # Process the file
         stats = await ingest_programmes_data(temp_file, db)
-
-        # Clean up
         os.remove(temp_file)
-
         await db.commit()
         return {"message": "File processed successfully", "stats": stats}
     except Exception as e:
         await db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.get("/health")
-async def health_check():
-    return {"status": "ok"}
